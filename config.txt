@@ -1,0 +1,4 @@
+[Params]
+baseurl: https://api-na.hosted.exlibrisgroup.com/almaws/v1/
+apikey: l7xxacf1ca2f5d8d4bfdbb59ca085b1391a7
+location: psx
