@@ -78,12 +78,10 @@ def get_marc_elements(datafield):
             new_subfields[subfields.attrib['code']] = subfields.text
     return new_subfields
 
-# Can't just get the last holding - go through primo heirarchy to get the last one that displays
-def find_last_displayed(holdings,mms_id):
+# Returns holding_id of holding if there are no items attahed, or LRS location holding if one exists
+def check_complicated_last_holding(holdings,mms_id):
     holding_id = None
     no_items = False
-    print (holdings.findall('./holding'))
-    # If a holding is an LRS holding, select that one as it should display last
     for h in holdings.findall('./holding'):
         if not no_items:
             print (get_item_count(mms_id,h.find('./holding_id').text))
@@ -93,6 +91,12 @@ def find_last_displayed(holdings,mms_id):
             elif h.find('./location').text.find('lrs') > -1:
                 print ('found in location')
                 holding_id = h.find('./holding_id')
+    return holding_id
+
+# Can't just get the last holding - go through primo heirarchy to get the last one that displays
+def find_last_displayed(holdings,mms_id):
+    print (holdings.findall('./holding'))
+    holding_id = check_complicated_last_holding(holdings,mms_id)
     # Otherwise, select last holding
     if holding_id is None:
         holding_id = holdings.findall('./holding')[-1].find('./holding_id')
